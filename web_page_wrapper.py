@@ -26,10 +26,10 @@ class WebPageWrapper(object):
         ret = requests.get(self.url)
         return ret.content
 
-    def get_children(self):
+    def get_children(self, commons):
         pgp = PageContentParser(self.content, self.url)
         for url in pgp.get_urls_that_belong_to_domain_as_set():
-            if self.url == url:
+            if self.url == url or url in commons:
                 continue
             try:
                 yield WebPageWrapper(url)

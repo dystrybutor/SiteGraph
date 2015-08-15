@@ -9,8 +9,13 @@ class SiteMap(object):
             soup = BeautifulSoup(site_map, "html.parser")
             self.parents = {x.contents[0]: set() for x in soup.find_all('loc')[1:]}
 
-    def set_parent_nodes(self, key, value):
-        self.parents[key] = value
+        self.commons = self.parents.keys()
+
+    def add_parent_nodes(self, key, nodes):
+        self.parents[key].update(nodes)
+
+    def add_parent_node(self, key, node):
+        self.parents[key].add(node)
 
     def iget_parents(self):
         for p in self.parents:

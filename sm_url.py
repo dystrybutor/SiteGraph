@@ -3,8 +3,8 @@ from web_page_wrapper import WebPageWrapper
 
 class SiteMapURL(object):
     def __init__(self, url):
-        p = WebPageWrapper(url)
-        self._children = p.get_children()
+        self.page = WebPageWrapper(url)
+        self.url = url
         self.nodes = set()
 
     def add_nodes(self, nodes):
@@ -13,5 +13,5 @@ class SiteMapURL(object):
     def get_new_nodes(self, nodes):
         return self.nodes.intersection(nodes)
 
-    def children(self):
-        return self._children
+    def children(self, commons):
+        return self.page.get_children(commons)
