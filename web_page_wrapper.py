@@ -6,7 +6,7 @@ from page_content_parser import PageContentParser
 
 class WebPageWrapper(object):
     def __init__(self, url):
-        print url
+        # print url
         self.url = url
         self.url_path = self._get_url_path_if_exists_or_raise_name_error()
         self.content = self._download_page_content()
@@ -34,7 +34,8 @@ class WebPageWrapper(object):
             try:
                 yield WebPageWrapper(url)
             except NameError as e:
-                print e
+                # print e
+                pass
 
     def _get_url_path_if_exists_or_raise_name_error(self):
         path = urlparse(self.url).path

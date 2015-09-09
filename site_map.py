@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 class SiteMap(object):
     def __init__(self, sitemap_xml):
         self.parents = None
-        self.map = {}
+        self.map = {"nodes": set(), "edges": set()}
 
         with open(sitemap_xml) as site_map:
             soup = BeautifulSoup(site_map, "html.parser")
