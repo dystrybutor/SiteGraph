@@ -27,7 +27,7 @@ class PageContentParser(object):
     def _do_links(self, url):
         if url.startswith("/"):
             return urlparse.urljoin(self.base_url, url)
-        elif not url.startswith(("htpp", "www")):
+        elif not url.startswith(("http", "www")):
             return urlparse.urljoin(self.content_url, url)
         else:
             return url
