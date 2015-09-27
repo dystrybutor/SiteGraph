@@ -10,14 +10,19 @@ def parent_worker(parent):
     try:
         node_set = set()
         edge_set = set()
-        for child in smu.children(sm.commons):
+        for child in [c for c in smu.children(sm.commons) if not isinstance(c, unicode)]:
             for c in child.get_children(sm.commons):
-                node_set.add(c.url)
-                sm.add_parent_node(smu.url, c.url)
-                edge_set.add((child.url, c.url))
+                if isinstance(c, unicode):
+                    edge_set.add((child.url, c))
+                else:
+                    node_set.add(c.url)
+                    sm.add_parent_node(smu.url, c.url)
+                    edge_set.add((child.url, c.url))
         parent_worker.q.put({'nodes': node_set, 'edges': edge_set})
-    except IndexError:
-        pass
+    except IndexError as e:
+        print e
+    except Exception as e:
+        print e
 
 
 def parent_worker_init(q):
@@ -26,7 +31,7 @@ def parent_worker_init(q):
 
 def to_file(sm_map):
     json_map = json.dumps({"nodes": list(sm_map['nodes']), "edges": list(sm_map['edges'])})
-    with open('map.json', 'w') as f:
+    with open('map2.json', 'w') as f:
         f.write(json_map)
 
 
@@ -36,7 +41,7 @@ if __name__ == "__main__":
     parents = sm.iget_parents()
     q = Queue()
     pool = Pool(8, parent_worker_init, [q])
-    pool.map_async(parent_worker, parents)
+    result = pool.map_async(parent_worker, parents)
     while time.clock() < 600:
         if not q.empty():
             partial_map = q.get()
